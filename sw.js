@@ -1,5 +1,5 @@
 /* Cassiopeia PWA: кэш оболочки приложения; потоки и метаданные всегда мимо кэша. */
-var CACHE = "csww-app-v1";
+var CACHE = "csww-app-v2";
 var ASSETS = ["./", "./index.html", "./manifest.webmanifest",
               "./icons/icon-192.png", "./icons/icon-512.png",
               "./icons/maskable-512.png", "./icons/apple-touch-icon.png"];

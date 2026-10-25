@@ -17,44 +17,77 @@
   html,body{margin:0;padding:0;background:var(--bg);color:var(--tx);
     font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
   body{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;
-    padding:calc(env(safe-area-inset-top,0px) + 18px) 18px calc(env(safe-area-inset-bottom,0px) + 18px)}
-  .h{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+    padding:calc(env(safe-area-inset-top,0px) + 18px) 16px calc(env(safe-area-inset-bottom,0px) + 16px)}
+  .h{display:flex;align-items:center;gap:12px;margin-bottom:14px}
   .dot{width:14px;height:14px;border-radius:50%;background:var(--ac);
     box-shadow:0 0 12px var(--ac);animation:p 2.4s infinite}
   body.playing .dot{animation-duration:1s}
   @keyframes p{0%,100%{opacity:.45}50%{opacity:1}}
   .h b{font-size:19px;letter-spacing:.3px}
   .h a{margin-left:auto;color:var(--mut);font-size:13px;text-decoration:none}
-  label{display:block;font-size:12px;color:var(--mut);margin:14px 0 6px;letter-spacing:.4px}
-  select{width:100%;background:#26264a;color:var(--tx);border:1px solid #34345f;
-    border-radius:12px;padding:13px 12px;font-size:16px;outline:none;cursor:pointer;appearance:none}
-  select:focus{border-color:var(--ac)}
-  .row{display:flex;gap:10px}
-  .row>*{flex:1}
-  .ctl{display:flex;align-items:center;gap:14px;margin-top:22px}
+  label{display:block;font-size:11.5px;color:var(--mut);margin:12px 0 6px;letter-spacing:.4px}
+  select,input[type=search]{width:100%;background:#26264a;color:var(--tx);border:1px solid #34345f;
+    border-radius:12px;padding:12px 11px;font-size:16px;outline:none;appearance:none}
+  select:focus,input[type=search]:focus{border-color:var(--ac)}
+  .srow{display:flex;gap:8px;align-items:center}
+  .srow select{flex:1;min-width:0}
+  .navbtn,.starbtn{flex:0 0 auto;width:46px;height:46px;border-radius:12px;border:1px solid #34345f;
+    background:#26264a;color:var(--tx);font-size:19px;cursor:pointer}
+  .navbtn:active,.starbtn:active{transform:scale(.94)}
+  .starbtn.on{color:#ffd85e;border-color:#7a6420}
+  .chip{flex:0 0 auto;padding:12px 12px;border-radius:12px;border:1px solid #34345f;background:#26264a;
+    color:var(--mut);font-size:13.5px;cursor:pointer}
+  .chip.on{color:#ffd85e;border-color:#7a6420}
+  .row2{display:flex;gap:8px}
+  .row2>div{flex:1;min-width:0}
+  .blurb{font-size:12px;color:var(--mut);margin-top:6px;min-height:15px}
+  .ctl{display:flex;align-items:center;gap:14px;margin-top:18px}
   .play{flex:0 0 auto;width:74px;height:74px;border-radius:50%;border:0;cursor:pointer;
     background:var(--ac);color:#fff;font-size:26px;display:flex;align-items:center;justify-content:center;
     box-shadow:0 6px 22px rgba(143,123,255,.4);transition:transform .12s}
   .play:active{transform:scale(.94)}
   .vol{flex:1;accent-color:var(--ac);height:34px}
-  .now{margin-top:20px;font-size:14.5px;line-height:1.5;color:var(--mut);min-height:44px}
+  .now{margin-top:16px;font-size:13px;line-height:1.45;color:var(--mut);min-height:44px}
+  .now .artist{display:block;font-size:12.5px;color:var(--ac)}
   .now b{color:var(--tx);font-weight:600;display:block;font-size:15.5px}
-  .err{display:none;margin-top:12px;font-size:13.5px;color:#ff9a9a}
+  .sleep{font-size:12px;color:#ffd85e;margin-top:4px;min-height:15px}
+  .err{display:none;margin-top:10px;font-size:13.5px;color:#ff9a9a}
   body.show-err .err{display:block}
-  .note{margin-top:auto;padding-top:16px;font-size:11.5px;color:#6d6d99}
+  .note{margin-top:auto;padding-top:14px;font-size:11.5px;color:#6d6d99}
 </style>
 </head>
 <body>
   <div class="h"><span class="dot"></span><b>Cassiopeia Station</b>
-    <a href="https://cassiopeia-station.ru/Stream/" target="_blank" rel="noopener">все станции ↗</a></div>
+    <a href="https://cassiopeia-station.ru/Stream/" target="_blank" rel="noopener">сайт ↗</a></div>
+
+  <div class="srow">
+    <input type="search" id="search" placeholder="Поиск станции или жанра…" aria-label="Поиск станции" style="flex:1;min-width:0">
+    <button class="chip" id="favonly" title="Только избранное">★</button>
+  </div>
 
   <label for="st">Станция</label>
-  <select id="st" class="st" aria-label="Станция"></select>
+  <div class="srow">
+    <button class="navbtn" id="prev" aria-label="Предыдущая станция">‹</button>
+    <select id="st" aria-label="Станция"></select>
+    <button class="navbtn" id="next" aria-label="Следующая станция">›</button>
+    <button class="starbtn" id="star" aria-label="В избранное">☆</button>
+  </div>
+  <div class="blurb" id="blurb"></div>
 
-  <div class="row">
-    <div style="flex:1">
+  <div class="row2">
+    <div>
       <label for="q">Качество</label>
-      <select id="q" class="q" aria-label="Качество"></select>
+      <select id="q" aria-label="Качество"></select>
+    </div>
+    <div>
+      <label for="sleepSel">Таймер сна</label>
+      <select id="sleepSel" aria-label="Таймер сна">
+        <option value="0">выкл</option>
+        <option value="15">15 мин</option>
+        <option value="30">30 мин</option>
+        <option value="60">60 мин</option>
+        <option value="90">90 мин</option>
+      </select>
     </div>
   </div>
 
@@ -62,63 +95,125 @@
     <button class="play" id="play" aria-label="Слушать">▶</button>
     <input class="vol" id="vol" type="range" min="0" max="100" aria-label="Громкость">
   </div>
-
+  <div class="sleep" id="sleep"></div>
   <div class="now" id="now"></div>
   <div class="err" id="err"></div>
 
-  <div class="note">«Радио Здоровье» отдаётся только по HTTP и не заиграет на HTTPS-страницах.
-    Установите приложение: Android — меню браузера «Установить приложение», iPhone — «На экран „Домой“.</div>
+  <div class="note">Установите приложение: Android — меню браузера «Установить приложение»,
+    iPhone — «На экран „Домой“. Потоки идут напрямую с серверов станции.</div>
 
 <script>
 (function () {
-  var HOST = "stream.cassiopeia-station.ru", HTTPS = "https:", HTTP = "http:";
+  var HOST = "stream.cassiopeia-station.ru", S = "https:";
+  // Карта портов сверена с Icecast server_name каждого потока (25.10.2026).
+  // q: [битрейт, порт]. «Радио Здоровье» исключено: его порты (1385/1505/1515) мертвы.
   var STATIONS = [
-    { n: "Cassiopeia Station",         q: [["320", "1195", HTTPS], ["256", "5015", HTTPS], ["128", "1075", HTTPS], ["64", "1085", HTTPS]] },
-    { n: "Cassiopeia Station · НАУКА", q: [["320", "1245", HTTPS], ["256", "5125", HTTPS], ["128", "1095", HTTPS], ["64", "1105", HTTPS]] },
-    { n: "Всесоюзное радио онлайн",    q: [["16", "1395", HTTPS]] },
-    { n: "Dancing Fox",                q: [["320", "1045", HTTPS], ["256", "1065", HTTPS], ["128", "1115", HTTPS], ["64", "1125", HTTPS]] },
-    { n: "Голоса Вселенной",           q: [["320", "1135", HTTPS], ["256", "1145", HTTPS], ["128", "1155", HTTPS]] },
-    { n: "Rock Space Station",         q: [["320", "1175", HTTPS], ["256", "1185", HTTPS], ["128", "1205", HTTPS], ["64", "1215", HTTPS]] },
-    { n: "Арифулин FM",                q: [["320", "1225", HTTPS], ["256", "1235", HTTPS], ["128", "1255", HTTPS], ["64", "1265", HTTPS]] },
-    { n: "Садовод",                    q: [["320", "1315", HTTPS], ["256", "1325", HTTPS], ["128", "1335", HTTPS], ["64", "1345", HTTPS], ["16", "1405", HTTPS]] },
-    { n: "Радио Небесных Сфер",        q: [["320", "1415", HTTPS], ["256", "1425", HTTPS], ["128", "1435", HTTPS], ["64", "1445", HTTPS]] },
-    { n: "Живая природа",              q: [["320", "1355", HTTPS], ["128", "1365", HTTPS], ["64", "1375", HTTPS]] },
-    { n: "Радио Здоровье (HTTP)",      q: [["64", "1385", HTTP], ["32", "1505", HTTP], ["16", "1515", HTTP]] },
-    { n: "Стратосфера",                q: [["320", "1715", HTTPS], ["256", "1735", HTTPS], ["128", "1745", HTTPS]] }
+    { id: "cassiopeia", n: "Cassiopeia Station", g: "Ambient",
+      b: "Электронная музыка композиторов из России",
+      q: [["320", "1195"], ["256", "5015"], ["128", "1075"], ["64", "1085"]] },
+    { id: "nauka", n: "Cassiopeia · Наука", g: "Разговорный",
+      b: "Лекции, планетарий и познавательные передачи",
+      q: [["320", "1245"], ["256", "5125"], ["128", "1095"], ["64", "1105"], ["16", "1395"]] },
+    { id: "vsesoyuz", n: "Всесоюзное радио", g: "Ретро",
+      b: "Передачи и песни, которые возвращают во времени",
+      q: [["320", "1045"], ["256", "1065"], ["128", "1115"], ["64", "1125"]] },
+    { id: "fox", n: "Dancing Fox", g: "Disco",
+      b: "Музыка 70-х и 80-х с катушек и кассет",
+      q: [["320", "1135"], ["256", "1145"], ["128", "1155"], ["64", "1165"]] },
+    { id: "voices", n: "Голоса Вселенной", g: "Ambient",
+      b: "Электронная музыка конца XX века",
+      q: [["320", "1175"], ["256", "1185"], ["128", "1205"], ["64", "1215"]] },
+    { id: "rock", n: "Rock Space Station", g: "Rock",
+      b: "Рок-направление синдиката Cassiopeia",
+      q: [["320", "1225"], ["256", "1235"], ["128", "1255"], ["64", "1265"]] },
+    { id: "arifulin", n: "Арифулин FM", g: "Ретро",
+      b: "Ретро-эфир сети Cassiopeia",
+      q: [["320", "1275"], ["256", "1285"], ["128", "1295"], ["64", "1305"]] },
+    { id: "garden", n: "Садовод", g: "Разговорное",
+      b: "Сад, огород и дачные разговоры",
+      q: [["320", "1315"], ["256", "1325"], ["128", "1335"], ["64", "1345"], ["16", "1405"]] },
+    { id: "spheres", n: "Радио Небесных Сфер", g: "Электронная",
+      b: "Музыка Андрея Климковского",
+      q: [["320", "1415"], ["256", "1425"], ["128", "1435"], ["64", "1445"]] },
+    { id: "nature", n: "Живая природа", g: "Ambient",
+      b: "Полевые записи: птицы, лес, вода",
+      q: [["320", "1355"], ["128", "1365"], ["64", "1375"]] },
+    { id: "stratosphere", n: "Стратосфера", g: "Ambient",
+      b: "Работа космонавтов на орбите и космическая музыка",
+      q: [["320", "1715"], ["256", "1735"], ["128", "1745"]] }
   ];
+  var BY_ID = {}; STATIONS.forEach(function (s, i) { s.i = i; BY_ID[s.id] = s; });
+
   function ls(k, d) { try { var v = localStorage.getItem("csww-" + k); return v === null ? d : v; } catch (e) { return d; } }
   function lsSet(k, v) { try { localStorage.setItem("csww-" + k, String(v)); } catch (e) {} }
+  function loadFav() { try { return JSON.parse(ls("fav", "[]")) || []; } catch (e) { return []; } }
 
-  var stSel = document.getElementById("st"), qSel = document.getElementById("q"),
+  var searchEl = document.getElementById("search"), favOnlyBtn = document.getElementById("favonly"),
+      stSel = document.getElementById("st"), qSel = document.getElementById("q"),
+      prevBtn = document.getElementById("prev"), nextBtn = document.getElementById("next"),
+      starBtn = document.getElementById("star"), blurbEl = document.getElementById("blurb"),
+      sleepSel = document.getElementById("sleepSel"), sleepEl = document.getElementById("sleep"),
       playBtn = document.getElementById("play"), vol = document.getElementById("vol"),
       nowEl = document.getElementById("now"), errEl = document.getElementById("err"),
       audio = new Audio();
   audio.preload = "none";
-  var si = Math.min(STATIONS.length - 1, parseInt(ls("st", "0"), 10) || 0), qi = 0,
-      playing = false, metaTimer = null;
 
-  STATIONS.forEach(function (s, i) {
-    var o = document.createElement("option"); o.value = i; o.textContent = s.n; stSel.appendChild(o);
-  });
+  var cur = BY_ID[ls("sid", "")] || STATIONS[0], qi = 0, playing = false,
+      metaTimer = null, sleepLeft = 0, sleepTimer = null,
+      favorites = loadFav(), favOnly = ls("favonly", "0") === "1";
+
+  function urlOf(path) { var q = cur.q[qi]; return S + "//" + HOST + ":" + q[1] + path; }
+  function visible() {
+    var t = (searchEl.value || "").trim().toLowerCase();
+    return STATIONS.filter(function (s) {
+      if (favOnly && favorites.indexOf(s.id) < 0) return false;
+      if (!t) return true;
+      return (s.n + " " + s.g + " " + s.b).toLowerCase().indexOf(t) >= 0;
+    });
+  }
+  function fillStations() {
+    var vis = visible();
+    if (!vis.length) { stSel.innerHTML = ""; return; }
+    if (vis.indexOf(cur) < 0) vis.push(cur);          // текущая остаётся выбираемой
+    stSel.innerHTML = "";
+    vis.forEach(function (s) {
+      var o = document.createElement("option");
+      o.value = s.id; o.textContent = s.n + " · " + s.g;
+      stSel.appendChild(o);
+    });
+    stSel.value = cur.id;
+  }
   function fillQ() {
     qSel.innerHTML = "";
-    STATIONS[si].q.forEach(function (q, i) {
+    cur.q.forEach(function (q, i) {
       var o = document.createElement("option"); o.value = i; o.textContent = q[0] + " kbps"; qSel.appendChild(o);
     });
-    qi = Math.min(STATIONS[si].q.length - 1, parseInt(ls("q" + si, "0"), 10) || 0);
+    qi = Math.min(cur.q.length - 1, parseInt(ls("q-" + cur.id, "0"), 10) || 0);
     qSel.value = qi;
   }
-  function cur() { return STATIONS[si].q[qi]; }
-  function urlOf(path) { var q = cur(); return q[2] + "//" + HOST + ":" + q[1] + path; }
-  function setNow(t, sub) {
-    nowEl.innerHTML = t ? "<b></b><span></span>" : "";
-    if (t) { nowEl.firstChild.textContent = t; nowEl.lastChild.textContent = sub || ""; }
+  function syncStar() {
+    starBtn.textContent = favorites.indexOf(cur.id) >= 0 ? "★" : "☆";
+    starBtn.classList.toggle("on", favorites.indexOf(cur.id) >= 0);
+    favOnlyBtn.classList.toggle("on", favOnly);
+  }
+  function setNow(artist, title, sub) {
+    nowEl.innerHTML = (title || artist)
+      ? (artist ? '<span class="artist"></span>' : "") + "<b></b><span></span>" : "";
+    if (title || artist) {
+      if (artist) nowEl.querySelector(".artist").textContent = artist;
+      nowEl.querySelector("b").textContent = title || cur.n;
+      nowEl.querySelectorAll("span")[artist ? 1 : 0].textContent = sub || "";
+    }
+  }
+  function splitTitle(t) {
+    var m = /^(.+?)\s+[-–]\s+(.+)$/.exec(t || "");
+    return m ? [m[1], m[2]] : ["", t || ""];
   }
   function setMediaSession(title, artist) {
     if (!("mediaSession" in navigator)) return;
     try {
       navigator.mediaSession.metadata = new MediaMetadata({
-        title: title || STATIONS[si].n, artist: artist || STATIONS[si].n,
+        title: title || cur.n, artist: artist || cur.n,
         artwork: [
           { src: "icons/icon-192.png", sizes: "192x192", type: "image/png" },
           { src: "icons/icon-512.png", sizes: "512x512", type: "image/png" }
@@ -132,15 +227,15 @@
         var s = (j && j.icestats && j.icestats.source) || {};
         var src = Array.isArray(s) ? s[0] : s;
         if (!playing) return;
-        var t = src.title || src.server_name || "";
-        setNow(t, src.listeners !== undefined ? "слушателей: " + src.listeners : "");
-        setMediaSession(t, STATIONS[si].n);
+        var parts = splitTitle(src.title || src.server_name || "");
+        setNow(parts[0], parts[1], src.listeners !== undefined ? "слушателей: " + src.listeners : "");
+        setMediaSession(parts[1] || cur.n, parts[0] || cur.n);
       }).catch(function () {});
   }
   function start() {
     document.body.classList.remove("show-err");
     playing = true; document.body.classList.add("playing");
-    playBtn.textContent = "⏸"; setNow("Подключение…", "");
+    playBtn.textContent = "⏸"; setNow("", "Подключение…", "");
     audio.src = urlOf("/stream"); audio.volume = vol.value / 100;
     audio.play().catch(function () { stop(); showErr("Не удалось запустить воспроизведение — нажмите ▶ ещё раз."); });
     clearInterval(metaTimer); pollMeta(); metaTimer = setInterval(pollMeta, 15000);
@@ -149,19 +244,59 @@
     playing = false; clearInterval(metaTimer);
     document.body.classList.remove("playing");
     playBtn.textContent = "▶"; audio.pause(); audio.removeAttribute("src"); audio.load();
-    setNow("", "");
+    setNow("", "", "");
   }
   function showErr(m) { document.body.classList.add("show-err"); errEl.textContent = m; }
+  function tune(s) {
+    cur = s; lsSet("sid", cur.id); fillQ(); fillStations(); syncStar();
+    blurbEl.textContent = cur.b;
+    if (playing) start();
+  }
+  function armSleep(min) {
+    clearInterval(sleepTimer); sleepLeft = min > 0 ? min * 60 : 0; sleepEl.textContent = "";
+    if (!sleepLeft) return;
+    sleepTimer = setInterval(function () {
+      sleepLeft--;
+      var m = Math.floor(sleepLeft / 60), s = sleepLeft % 60;
+      sleepEl.textContent = "⏱ до отключения " + m + ":" + (s < 10 ? "0" : "") + s;
+      if (sleepLeft <= 0) {
+        clearInterval(sleepTimer); sleepSel.value = "0";
+        sleepEl.textContent = "⏱ Таймер сработал — воспроизведение остановлено";
+        if (playing) stop();
+      }
+    }, 1000);
+  }
+
   playBtn.addEventListener("click", function () { playing ? stop() : start(); });
-  stSel.addEventListener("change", function () { si = +stSel.value; lsSet("st", si); fillQ(); if (playing) start(); });
-  qSel.addEventListener("change", function () { qi = +qSel.value; lsSet("q" + si, qi); if (playing) start(); });
+  stSel.addEventListener("change", function () { var s = BY_ID[stSel.value]; if (s) tune(s); });
+  prevBtn.addEventListener("click", function () {
+    var vis = visible(); if (!vis.length) return;
+    var pos = vis.map(function (s) { return s.id; }).indexOf(cur.id);
+    tune(vis[(pos - 1 + vis.length) % vis.length] || vis[0]);
+  });
+  nextBtn.addEventListener("click", function () {
+    var vis = visible(); if (!vis.length) return;
+    var pos = vis.map(function (s) { return s.id; }).indexOf(cur.id);
+    tune(vis[(pos + 1) % vis.length] || vis[0]);
+  });
+  starBtn.addEventListener("click", function () {
+    var at = favorites.indexOf(cur.id);
+    if (at >= 0) favorites.splice(at, 1); else favorites.push(cur.id);
+    lsSet("fav", JSON.stringify(favorites)); syncStar();
+  });
+  favOnlyBtn.addEventListener("click", function () {
+    favOnly = !favOnly; lsSet("favonly", favOnly ? "1" : "0"); fillStations(); syncStar();
+  });
+  searchEl.addEventListener("input", fillStations);
+  qSel.addEventListener("change", function () { qi = +qSel.value; lsSet("q-" + cur.id, qi); if (playing) start(); });
+  sleepSel.addEventListener("change", function () { armSleep(+sleepSel.value); });
   vol.addEventListener("input", function () { audio.volume = vol.value / 100; lsSet("vol", vol.value); });
   audio.addEventListener("playing", function () {
-    document.body.classList.remove("show-err"); setMediaSession(STATIONS[si].n, ""); pollMeta();
+    document.body.classList.remove("show-err"); setMediaSession(cur.n, ""); pollMeta();
   });
   audio.addEventListener("error", function () {
     if (!playing) return;
-    stop(); showErr("Поток недоступен. Станции с пометкой (HTTP) работают только без HTTPS.");
+    stop(); showErr("Поток недоступен — станция, вероятно, временно не вещает.");
   });
   if ("mediaSession" in navigator) {
     try {
@@ -169,10 +304,9 @@
       navigator.mediaSession.setActionHandler("pause", stop);
     } catch (e) {}
   }
-  stSel.value = si; fillQ(); vol.value = ls("vol", "80");
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js").catch(function () {});
-  }
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});
+
+  fillQ(); fillStations(); syncStar(); blurbEl.textContent = cur.b; vol.value = ls("vol", "80");
 })();
 </script>
 </body>
